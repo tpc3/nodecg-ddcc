@@ -69,6 +69,7 @@
     "@parcel/core": "*",
     "@parcel/reporter-cli": "*",
     "@parcel/validator-typescript": "*",
+    "@types/animejs": "^3.1.12",
     "@types/node": "^18",
     "animejs": "^3.2.2",
     "concurrently": "*",

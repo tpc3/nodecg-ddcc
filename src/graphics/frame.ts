@@ -1,6 +1,6 @@
 import type { PlaybackReplicant, DiscordChatReplicant, DiscordVoiceReplicant } from '../types/schemas';
-import anime from "../../node_modules/animejs/lib/anime.es.js"
-import { AbstractReplicant } from "@nodecg/types/shared/replicants.shared";
+import anime from "animejs/lib/anime.es"
+
 
 // You can access the NodeCG api anytime from the `window.nodecg` object
 // Or just `nodecg` for short. Like this!:
