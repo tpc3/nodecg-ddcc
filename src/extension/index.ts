@@ -7,6 +7,8 @@ module.exports = function (nodecg: NodeCG.ServerAPI) {
 	const vcRep = nodecg.Replicant<DiscordVoiceReplicant[]>("vc");
 	const chatRep = nodecg.Replicant<DiscordChatReplicant>("chat");
 	const router: Router = nodecg.Router();
+    //initialize
+    vcRep.value = [];
 	router.post("/chat", (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         const { name } = req.body;
