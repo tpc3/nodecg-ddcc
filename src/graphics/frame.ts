@@ -172,7 +172,9 @@ NodeCG.waitForReplicants(vcRep).then(()=>{
 			}
 			newElm.id = "";
 			newElm.classList.remove("hidden");
-			newElm.firstElementChild.src = member.avatar;
+			if(member.avatar != null && member.avatar !== ""){
+				newElm.firstElementChild.src = member.avatar;
+			}
 			newElm.lastElementChild.innerText = member.name;
 			if(member.speaking){
 				newElm.firstElementChild.classList.add("outline","outline-emerald-500", "outline-4");

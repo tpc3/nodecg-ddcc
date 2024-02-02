@@ -8,5 +8,5 @@
 export interface DiscordVoiceReplicant {
 	name: string;
 	speaking: boolean;
-	avatar: string;
+	avatar?: string;
 }
