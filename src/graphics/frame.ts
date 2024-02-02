@@ -166,7 +166,7 @@ NodeCG.waitForReplicants(vcRep).then(()=>{
 			return;
 		}
 		newVal.forEach((member) =>{
-			let newElm = <HTMLElement>templateElm.cloneNode()
+			let newElm = <HTMLElement>templateElm.cloneNode(true)
 			if(!(newElm.firstElementChild instanceof HTMLImageElement && newElm.lastElementChild instanceof HTMLElement && newElm.childElementCount === 2) ){
 				return;
 			}
