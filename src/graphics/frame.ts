@@ -1,5 +1,7 @@
-import type { PlaybackReplicant, DiscordChatReplicant, DiscordVoiceReplicant } from '../types/schemas';
+import type { PlaybackReplicant, DiscordChatReplicant, DiscordVoiceReplicant, InfoReplicant } from '../types/schemas';
 import anime from "animejs/lib/anime.es"
+import { isInfo, isPlayback } from './typeGuard';
+import { clock } from './common';
 
 
 // You can access the NodeCG api anytime from the `window.nodecg` object
@@ -8,25 +10,15 @@ import anime from "animejs/lib/anime.es"
 //value
 // milisecond
 const duration = 1000;
-const showTime = 10000;
 const timeToLive = 20000;
 // numbers of items
 const deadline = 5;
 
+//traslateY
+const textHeight = 20;
+
 
 //func
-const clock = (e: HTMLElement) => {
-	const chk = (i: number) => {
-		if (i < 10) {
-			return '0' + i;
-		}
-
-		return String(i);
-	};
-
-	const time = new Date();
-	e.innerText = chk(time.getHours()) + ':' + chk(time.getMinutes()) + ':' + chk(time.getSeconds());
-};
 
 
 //elm
@@ -36,6 +28,7 @@ const clockElm = document.getElementById("clock");
 const playbackRep = nodecg.Replicant<PlaybackReplicant>("playback","nodecg-playback");
 const vcRep = nodecg.Replicant<DiscordVoiceReplicant[]>("vc");
 const chatRep = nodecg.Replicant<DiscordChatReplicant>("chat");
+const infoRep = nodecg.Replicant<InfoReplicant>("info");
 
 //clock
 if(clockElm != null){
@@ -44,58 +37,107 @@ if(clockElm != null){
 	}, 1000 )
 }
 
+//info
+NodeCG.waitForReplicants(infoRep).then(()=>{
+	const seasonElm = document.getElementById("season");
+	const epElm = document.getElementById("episode");
+	const personalityElm = document.getElementById("personality");
+	const guestElm = document.getElementById("guest");
+
+	infoRep.on("change", newValue => {
+		if (!isInfo(newValue)){
+			return;
+		}
+		if (seasonElm != null){
+			seasonElm.innerText="S" + newValue.season.toString();
+		}
+		if(epElm != null){
+			epElm.innerText= "Ep" + newValue.ep.toString();
+		}
+		if(personalityElm != null){
+			personalityElm.innerText= newValue.personality;
+		}
+		if(guestElm != null){
+			guestElm.innerText= newValue.guest;
+		}
+	});
+})
+
+
 //playback callback
 NodeCG.waitForReplicants(playbackRep).then(()=>{
-	//elm
-	const currentBGMElm = document.getElementById("current-temp");
-    const frameElm = document.getElementById("current");
-    const trackTitleElm = document.getElementById("track-title");
-    const trackArtistElm = document.getElementById("track-artist");
-    const trackAlbumElm = document.getElementById("track-album");
-	if (currentBGMElm != null && frameElm != null && trackArtistElm != null && trackTitleElm != null && trackAlbumElm != null){
-		trackTitleElm.id = "";
-    	trackArtistElm.id = "";
-    	trackAlbumElm.id = "";
-		playbackRep.on("change",(newVal) =>{
-			if (newVal != null){
-				console.log("received");
-				if(frameElm.lastElementChild)
-					frameElm.lastElementChild.classList.add("hidden");
-				if (newVal.state === 1){
-					trackTitleElm.innerText = newVal.title;
-					if (newVal.artist !== "")
-						trackArtistElm.innerText = `by ${newVal.artist}`;
-					else trackArtistElm.innerText = "";
-					if (newVal.album !== "")
-						trackAlbumElm.innerText = `from ${newVal.album}`;
-					else trackAlbumElm.innerText = "";
-					let tmpElm: HTMLElement = <HTMLElement>currentBGMElm.cloneNode(true);
-					tmpElm.classList.remove("hidden");
-					tmpElm.id = "current-anime"
-					let tl = anime.timeline({
-						easing: 'easeOutExpo',
-						duration: 750,
-					});
+	setTimeout(()=>{
+		//elm
+		const playbackElm = document.getElementById("playback");
+		const textElm = document.getElementById("playback-text");
+		playbackRep.on("change", (newValue, oldValue) => {
+			let tl = anime.timeline({});
+			if(!isPlayback(newValue)){
+				return;
+			}
+			if(playbackElm == null || textElm == null){
+				return;
+			}
+			if(isPlayback(oldValue)){
+				if(oldValue.state === 1){
 					tl.add({
-						targets:tmpElm,
-						translateX: [{ value: 400, duration: 0 }, { value: 0 }],
-						duration,
-					});
-					tl.add({
-						targets:tmpElm,
-						translateX: 400,
-						duration,
-						delay: showTime,
-						complete: () =>{
-							if(frameElm.firstElementChild)
-								frameElm.removeChild(frameElm.firstElementChild);
+						targets: playbackElm,
+						duration: duration/2,
+						easing: "easeInBack",
+						translateY: 100,
+						complete: ()=>{
+							playbackElm.classList.add("hidden");
 						}
-					});
-					frameElm.appendChild(tmpElm);
+					});//tl.add(1)
 				}
 			}
-		});
-	} 
+			if(newValue.state !== 1){
+				return;
+			}
+			tl.add({
+				targets: textElm,
+				translateY: textHeight,
+				duration: 1,
+				complete: ()=>{
+					const trackElm = document.getElementById("track");
+					const artistElm = document.getElementById("artist");
+					if( trackElm instanceof HTMLElement
+						&& artistElm instanceof HTMLElement )
+					{
+						trackElm.innerText = newValue.title;
+						if(typeof newValue.artist === "string" && newValue.artist !== ""){
+							if(typeof newValue.album === "string" && newValue.album !== ""){
+								artistElm.innerText = `${newValue.artist} - ${newValue.album}`
+							}
+							else{
+								artistElm.innerText=newValue.artist;
+							}
+						}else{
+							artistElm.innerText="Unknown"
+						}
+						playbackElm.classList.remove("hidden");
+					}	
+				}
+			});//tl.add(2)
+			tl.add({
+				targets: playbackElm,
+				duration: duration /2,
+				easing: "easeOutBack",
+				translateY: [100,0],
+			});//tl.add(3)
+			tl.add({
+				targets: textElm,
+				easing: "easeOutExpo",
+				translateY: -textHeight,
+				duration: duration,
+				delay: 4*duration,
+				complete: ()=>{
+				}
+			})//tl.add(4)
+		})
+	}, duration * 2)
+	
+	
 })
 
 //chat callback
@@ -125,7 +167,6 @@ NodeCG.waitForReplicants(chatRep).then(()=>{
 
 		let newElm = <HTMLElement>templateElm.cloneNode(true);
 		newElm.id = "";
-		newElm.classList.remove("hidden");
 		let tl = anime.timeline({
             easing: 'easeOutExpo',
             duration,
@@ -171,7 +212,6 @@ NodeCG.waitForReplicants(vcRep).then(()=>{
 				return;
 			}
 			newElm.id = "";
-			newElm.classList.remove("hidden");
 			if(member.avatar != null && member.avatar !== ""){
 				newElm.firstElementChild.src = member.avatar;
 			}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <title>waiting</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href="main.css" rel="stylesheet">
+
+        <style>
+            .text-border{
+                -webkit-text-stroke: 1px #000;
+            }
+	    .font-jp {
+                font-family: "M PLUS Rounded 1c", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!--Right Top-->
+        <div class="absolute top-0 right-0 pt-4 pb-2 px-4 bg-slate-200 shadow rounded-bl-3xl flex flex-row text-3xl">
+            <div class="align-middle overflow-hidden w-48 flex gap-1 items-center justify-center">
+                <div class="material-icons text-3xl">schedule</div>
+                <div id="clock" class="font-jp font-medium"></div>
+            </div>
+        </div>
+        <!--Right Bottom-->
+        <div class="absolute bottom-0 w-2/5 right-0 pt-2 pb-4 px-4 bg-rose-100 shadow rounded-tl-3xl">
+            <div class="m-4 flex flex-col justify-start items-start gap-2 font-jp font-medium text-4xl">
+                <div>
+                    <span id="date"> </span>
+                </div>
+                <div>
+                    <span id="time" class="font-semibold text-8xl"> </span>
+                    <span>開始予定</span>
+                </div>
+                <div id="state" >開始までしばらくお待ちください</div>
+            </div>
+
+        </div>
+    </body>
+	<script type="module" src="./waiting.ts"></script>
+</html>

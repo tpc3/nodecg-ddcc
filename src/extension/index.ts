@@ -1,14 +1,18 @@
 import type NodeCG from '@nodecg/types';
-import type { DiscordChatReplicant,DiscordVoiceReplicant } from '../types/schemas';
+import { PlaybackReplicant, type DiscordChatReplicant,type DiscordVoiceReplicant, type SwitchReplicant } from '../types/schemas/index';
 import { Router } from 'express';
+import { isPlayback } from "./typeGuard"
 
 module.exports = function (nodecg: NodeCG.ServerAPI) {
 	//rep
 	const vcRep = nodecg.Replicant<DiscordVoiceReplicant[]>("vc");
 	const chatRep = nodecg.Replicant<DiscordChatReplicant>("chat");
+    const switchRep = nodecg.Replicant<SwitchReplicant>("switch");
+    const playbackRep = nodecg.Replicant<PlaybackReplicant>("playback", "nodecg-playback");
 	const router: Router = nodecg.Router();
     //initialize
     vcRep.value = [];
+    switchRep.value = "prepare"
 	router.post("/chat", (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         const { name } = req.body;
@@ -42,5 +46,18 @@ module.exports = function (nodecg: NodeCG.ServerAPI) {
         vcRep.value = members;
     });
 	nodecg.mount("/ddcc", router);
+
+    //Standby→OnAir
+    playbackRep.on("change",(newValue) => {
+        if (!isPlayback(newValue)){
+            return;
+        }
+        if (newValue.state !== 1){
+            return;
+        }
+        if (switchRep.value === "standby"){
+            switchRep.value = "onair"
+        }
+    })
 
 };

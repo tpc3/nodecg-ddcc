@@ -1,0 +1,24 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"season":{
+			"type":"number"
+		},
+		"ep":{
+			"type":"number"
+		},
+		"personality":{
+			"type":"string"
+		},
+        "guest":{
+			"type":"string"
+		},
+        "start":{
+            "type": "string",
+            "format": "date-time"
+        }
+	},
+	"additionalProperties": false,
+	"required":["season","ep", "personality", "guest", "start"]
+}

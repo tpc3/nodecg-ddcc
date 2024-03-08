@@ -9,7 +9,7 @@
             rel="stylesheet"
         />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="main.css" rel="stylesheet">
 
         <style>
             .text-border{
@@ -22,66 +22,62 @@
     </head>
     <body>
         <!--Template-->
-        <div id="vc-template" class="align-middle hidden text-left p-1">
-            <img class="rounded-full inline bg-white shadow"
-                src="https://cdn.discordapp.com/avatars/948940995502964757/d5f0b28260e6cf38c8e7ff493748b914.png"
-                width="48" height="48" />
-            <div class="bg-sky-200/50 px-3 mr-2 rounded-xl shadow inline-block align-middle font-jp font-medium">Anonymous</div>
+        <div class="hidden">
+            <div id="vc-template" class="align-middle  text-right p-1 flex flex-row-reverse items-center opacity-75">
+                <img class="rounded-full inline bg-white shadow"
+                    src="https://cdn.discordapp.com/avatars/948940995502964757/d5f0b28260e6cf38c8e7ff493748b914.png"
+                    width="48" height="48" />
+                <div class="bg-sky-200 px-3 mr-2 rounded-xl shadow inline-block align-middle font-jp font-medium">Anonymous</div>
+            </div>
+		    <div id="chat-template" class="align-middle flex flex-row-reverse items-end gap-1 p-1">
+			    <img class="rounded-full inline bg-white shadow align-middle my-1 opacity-75"
+					src="https://avatars.githubusercontent.com/u/76497730"
+					width="40" height="40" />
+			    <div class="flex flex-col items-end gap-1 opacity-75">
+				    <div class="text-white font-jp text-right text-base leading-none text-border font-extrabold">test</div>
+				    <div class="max-w-[400px] p-1 border-4 rounded-t-2xl rounded-bl-2xl shadow bg-indigo-200 border-transparent align-middle text-left leading-tight font-jp font-medium line-clamp-4">test</div>
+			    </div>
+		    </div>
         </div>
-        <div id="current-temp" class="hidden absolute bg-slate-200/75 w-[400px] rounded-l-lg overflow-hidden shadow top-20 right-0">
-            <div class="font-jp font-medium ml-2 my-1 text-[32px] flex">
-                <div>
-                    <span class="material-icons align-sub text-4xl mr-2">queue_music</span>
-                </div>
-                <div>
-                    <section>
-                        <span id="track-title"></span>
-                    </section>
-                    <section>
-                        <span id="track-artist"></span>
-                    </section>
-                    <section>
-                        <span id="track-album"></span>
-                    </section>
+        <!--Left Top-->
+        <!--Left Bottom-->
+        <div id="playback" class="absolute bottom-4 left-4 px-4 py-1 bg-rose-200/75 shadow rounded-full align-middle overflow-hidden hidden">
+            <div class="h-10 flex gap-1 items-center justify-center text-2xl overflow-y-hidden">
+                <div class="material-icons text-3xl">queue_music</div>
+                <div id="playback-text" class="font-jp font-medium leading-10">
+                    <div id="artist">Unknown - Test</div><div id="track">test</div>
                 </div>
             </div>
         </div>
-		<div id="chat-template" class="hidden align-middle flex flex-row-reverse items-end gap-1 p-1">
-			<img class="rounded-full inline bg-white shadow align-middle my-1"
-					src="https://avatars.githubusercontent.com/u/76497730"
-					width="40" height="40" />
-			<div class="flex flex-col items-end gap-1">
-				<div class="text-white font-jp text-right text-base leading-none text-border font-extrabold">test</div>
-				<div class="max-w-[400px] p-1 border-4 rounded-t-2xl rounded-bl-2xl shadow bg-indigo-200/75 border-transparent align-middle text-left leading-tight font-jp font-medium line-clamp-4">test</div>
-			</div>
-		</div>
-        <!--Left Top-->
-        <div id="vc" class="text-[24px] absolute overflow-hidden left-0 p-4">
-        </div>
-        <!--Left Bottom-->
         <!--Right Top-->
-        <div class="absolute bg-slate-200/75 px-4 rounded-full align-middle overflow-hidden shadow top-4 right-4">
-            <span class="material-icons text-3xl align-sub">schedule</span>
-            <span id="clock" class="font-jp font-medium text-[32px]"></span>
+        <div class="absolute top-0 right-0 pt-4 pb-2 px-4 bg-slate-200 shadow rounded-bl-3xl flex flex-row text-3xl">
+            <div class="align-middle overflow-hidden px-2 flex gap-1 items-center justify-center">
+                <div class="material-icons text-3xl">info_outline</div>
+                <div class="font-jp font-medium">
+                    <span id="title"></span>
+                    <span id="season"></span>
+                    <span id="episode"></span>
+                </div>
+            </div>
+            <div class="align-middle overflow-hidden border-l px-2 border-gray-400 flex gap-1 items-center justify-center">
+                <div class="material-icons text-3xl">people</div>
+                <div class="font-jp font-medium">
+                    <span id="personality"></span>
+                    <span>/</span>
+                    <span id="guest"></span>
+                </div>
+            </div>
+            <div class="align-middle overflow-hidden border-l border-gray-400 px-2 flex gap-1 items-center justify-center">
+                <div class="material-icons text-3xl">schedule</div>
+                <div id="clock" class="font-jp font-medium">00:00:00</div>
+            </div>
         </div>
-        <div class="m-0 w-screen h-screen overflow-hidden" id="current">
+        <div id="vc" class="text-[24px] absolute overflow-hidden right-2 top-16 ">
         </div>
         <!--Right Bottom-->
 		<div id="chat" class="text-[24px] absolute overflow-hidden bottom-10 right-0 pr-4 break-all w-[500px]"></div>
-        <div class="absolute overflow-hidden bottom-0 right-0 mr-2 text-[32px] text-white text-border font-extrabold font-jp">Comments</div>
+        <div class="absolute overflow-hidden bottom-0 right-2 text-[32px] text-white text-border font-extrabold font-jp">Comments</div>
         <!--Top-->
-        <div id="counter" class="hidden absolute bg-slate-200/75 left-1/2 top-0 rounded-b-lg h-[64px] w-[640px] text-center text-[32px] flex items-center justify-center">
-            <div class="overflow-hidden font-jp ml-1 mb-1 mt-1 mr-1 leading-tight">
-                <span class="material-icons text-3xl">hourglass_full</span>
-                <span id="counter-title" class="font-bold"></span>: <span id="counter-value" class="text-[48px] font-extrabold"></span>
-            </div>
-        </div>
-        <div id="memo" class="absolute hidden bg-slate-200/75 top-0 left-1/2 rounded-b-lg h-[64px] w-[640px] text-center text-[32px] align-middle">
-            <div class="overflow-hidden font-jp font-bold absolute top-1 left-1 right-1 bottom-1 leading-tight flex items-center justify-center">
-                <span class="material-icons text-3xl">edit_note</span>
-                <span id="memo-text"></span>
-            </div>
-        </div>
         <!--Bottom-->
         
     </body>

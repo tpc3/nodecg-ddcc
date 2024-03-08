@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <title>switcher</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href="main.css" rel="stylesheet">
+    </head>
+    <body>
+        <iframe id="frame" src="./frame.html" scrolling="no" class="absolute hidden top-0 left-0 h-full w-full bg-transparent overflow-hidden"></iframe>
+        <iframe id="waiting" src="./waiting.html" scrolling="no" class="absolute hidden top-0 left-0 h-full w-full bg-transparent overflow-hidden"></iframe>
+        <div id="bg"class="absolute hidden top-0 left-0 h-full w-full bg-black">
+            <iframe id="logo"src="https://pages.tpc3.org/logo/" scrolling="no" class="hidden w-[1920px] aspect-video overflow-hidden"></iframe>
+        </div>
+    </body>
+	<script type="module" src="./switcher.ts"></script>
+</html>
