@@ -34,6 +34,7 @@ module.exports = function (nodecg: NodeCG.ServerAPI) {
         }
         if(members.length === 0){
             res.send('{result: "ok", error: null}');
+            vcRep.value = [];
             return;
         }
         for(let i=0; i< members.length; i++){
